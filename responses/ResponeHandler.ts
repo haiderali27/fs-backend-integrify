@@ -5,6 +5,7 @@ export class ResponseHandler {
       this.message = message
       this.data = data
     }
+
     static resourceFetched(data: string, msg?: string) {
         if(!msg){
             return new ResponseHandler(200, "Success",  data)

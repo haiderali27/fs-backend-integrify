@@ -2,10 +2,11 @@ import { NextFunction, Request, Response } from "express";
 import ProductsService from "../services/productsService";
 import { ApiError } from "../errors/ApiError";
 import { Product } from "../types/products";
+import { ResponseData } from "../responses/ResponseData";
 
 
 const ProductController = {
-  async findAllProduct(req: Request, res: Response) {
+  async findAllProduct(req: Request, res: Response, next:NextFunction) {
     try {
       const pageNumber = Number(req.query.offset) || 1;
       const pageSize = Number(req.query.limit) || 10;
@@ -15,7 +16,9 @@ const ProductController = {
       const max_price = Number(req.query.price_max) || Number.MAX_VALUE
 
       const products = await ProductsService.paginateProducts(pageNumber, pageSize, title, categoryId, min_price, max_price);
-      res.json({ products });
+      //res.json({ products });
+      next(ResponseData.fetchResource(200, products))
+
     } catch (error) {
       res.status(500).json({ error: "Internal Server Error" });
     }
@@ -40,16 +43,20 @@ const ProductController = {
       return;
     }
 
-    res.json({ product });
+    //res.json({ product });
+    next(ResponseData.fetchResource(200, product))
+
   },
 
-  async createOneProduct(req: Request, res: Response) {
+  async createOneProduct(req: Request, res: Response, next:NextFunction) {
     const newProduct: Product = req.body;
     const categoryId: string = req.body.categoryId;
 
     const product = await ProductsService.createOne(newProduct, categoryId);
 
-    res.status(201).json({ product });
+    //res.status(201).json({ product });
+    next(ResponseData.fetchResource(201, product))
+ 
   },
 
   async updateProduct(req: Request, res: Response, next: NextFunction) {
@@ -64,7 +71,9 @@ const ProductController = {
       return;
     }
 
-    res.json({ product });
+    //res.json({ product });
+    next(ResponseData.fetchResource(200, product))
+
   },
 
   async deleteProduct(req: Request, res: Response, next: NextFunction) {
@@ -76,7 +85,10 @@ const ProductController = {
       return;
     }
 
-    res.json({ message: "Product deleted successfully" });
+    //res.json({ message: "Product deleted successfully" });
+    next(ResponseData.fetchResource(200, deletedProduct))
+
+
   },
 };
 

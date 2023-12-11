@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import UsersService from "../services/userService";
 import { ApiError } from "../errors/ApiError";
 import { ResponseHandler } from "../responses/ResponeHandler";
-
+import { ResponseData } from "../responses/ResponseData";
+import { WithAuthRequest } from "../middlewares/checkAuth";
 export async function getOffsetUser(req:Request, res: Response, next: NextFunction)  {
   
   const pageNumber = Number(req.query.pageNumber) || 1;
@@ -15,7 +16,8 @@ export async function getOffsetUser(req:Request, res: Response, next: NextFuncti
   if(!users) {
     next(ApiError.internal("Internal Server error"));
   }
-  next(ResponseHandler.resourceFetched(JSON.stringify(users)))
+  //next(ResponseHandler.resourceFetched(JSON.stringify(users)))
+  next(ResponseData.fetchResource(200, users))
   //res.json(users);
   
 }
@@ -37,7 +39,9 @@ export async function findOneUser(req: Request, res: Response, next: NextFunctio
     next(ApiError.resourceNotFound("User not found."))
     return;
   }
-  next(ResponseHandler.resourceFetched(JSON.stringify(user)))
+  //next(ResponseHandler.resourceFetched(JSON.stringify(user)))
+  next(ResponseData.fetchResource(200, user))
+
  // res.json({ user });
 }
 
@@ -47,7 +51,9 @@ export async function createOneUser(req: Request, res: Response, next:NextFuncti
     next(ApiError.internal("Details are Required"))
   }
   const user = await UsersService.createOne(newUser);
-  next(ResponseHandler.resourceCreated(JSON.stringify(user), `User with ${user._id} has been added`))
+  //next(ResponseHandler.resourceCreated(JSON.stringify(user), `User with ${user._id} has been added`))
+  next(ResponseData.fetchResource(201, user))
+
  // res.status(201).json({ user });
 }
 
@@ -60,8 +66,10 @@ export async function findOneAndUpdate(req: Request,res: Response,next: NextFunc
       next(ApiError.resourceNotFound("User not found."));
       return;
     }
-    next(ResponseHandler.resourceUpdated(JSON.stringify(updatedUser), `User with ${updatedUser._id} has been updated`))
+   //next(ResponseHandler.resourceUpdated(JSON.stringify(updatedUser), `User with ${updatedUser._id} has been updated`))
      //res.status(200).json({ updatedUser });
+     next(ResponseData.fetchResource(200, updatedUser))
+
 }
 
 export async function findOneAndDelete( req: Request, res: Response, next: NextFunction ) {
@@ -73,6 +81,8 @@ export async function findOneAndDelete( req: Request, res: Response, next: NextF
         return;
     }
     next(ResponseHandler.resourceDeleted(JSON.stringify(deletedUser), `User with ${deletedUser._id} has been Deleted`))
+    next(ResponseData.fetchResource(200, deletedUser))
+
    // res.status(200).json("User deleted ...");
 }
 
@@ -87,7 +97,9 @@ export async function signup(req: Request, res: Response,  next: NextFunction) {
     })
     return
   }
-  next(ResponseHandler.resourceCreated(JSON.stringify(user), `User has been added`))
+  //next(ResponseHandler.resourceCreated(JSON.stringify(user), `User has been added`))
+  next(ResponseData.fetchResource(201, user))
+
  // res.status(201).json({message: "user created",user,})
 }
 
@@ -95,14 +107,35 @@ export async function signup(req: Request, res: Response,  next: NextFunction) {
 export async function login(req: Request, res: Response) {
   const { email, password} = req.body
   const login = await UsersService.login(email, password)
-
   if (login.status === false) {
     // TODO throw API error
-    res.status(400).json({ accessToken: null, message: "Bad credentials" })
+    res.status(400).json({ access_token: null, message: "Bad credentials" })
     return
   }
 
-  res.json({ message: login.message, accessToken: login.accessToken })
+  res.json({ message: login.message, access_token: login.accessToken })
+}
+
+export async function getProfile(req: WithAuthRequest, res: Response, next: NextFunction) {
+  const decoded = req.decoded
+
+  const userId = decoded?.userId
+  if(userId)
+  {
+    const user = await UsersService.getOne(userId);
+    if (!user) {
+      next(ApiError.resourceNotFound("User not found."))
+      return;
+    }
+    next(ResponseData.fetchResource(200, user))
+    return
+  }
+
+  next(ApiError.resourceNotFound("User not found."))
+
+  //next(ResponseHandler.resourceFetched(JSON.stringify(user)))
+
+ // res.json({ user });
 }
 
 
@@ -114,5 +147,6 @@ export default {
   findOneAndUpdate,
   findOneAndDelete,
   login,
+  getProfile,
   signup
 };

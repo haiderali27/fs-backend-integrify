@@ -18,6 +18,7 @@ export function checkAuth(req: WithAuthRequest,_: Response,next: NextFunction) {
 
   try {
     const decoded = jwt.verify(token,process.env.TOKEN_SECRET as string) as DecodedUser
+    //console.log('#################',decoded.userId)
     req.decoded = decoded
     next()
   } catch (err) {

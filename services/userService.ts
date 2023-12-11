@@ -24,6 +24,12 @@ async function findOne(userId: number) {
   return user
 }
 
+async function getOne(userId: string) {
+  const id = new mongoose.Types.ObjectId(userId)
+  const user = await UserRepo.findById(userId)
+  return user
+}
+
 async function createOne(user: User) {
   const newUser = new UserRepo(user)
   return await newUser.save()
@@ -124,5 +130,6 @@ export default {
   findOneAndDelete,
   createNewOne,
   findOneByEmail,
+  getOne,
   login
 }
