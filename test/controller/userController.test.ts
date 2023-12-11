@@ -70,15 +70,15 @@ it("should update the user", async () => {
       email: "update@gmail.com",
       password: "test123",
       role: "User",
-      _id: "655e2273fe4c4f58b6a80113",
-      __v: 0,
+      id: "655e2273fe4c4f58b6a80113",
+   
     });
 });
 
 it("should delete the user", async () => {
     const response = await request(app)
       .delete("/api/v1/users/655e2273fe4c4f58b6a80113");
-      expect(response.body.data._id).toEqual("655e2273fe4c4f58b6a80113");
+      expect(response.body.data.id).toEqual("655e2273fe4c4f58b6a80113");
     });
 
 });

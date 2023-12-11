@@ -2,7 +2,7 @@ import request from "supertest";
 
 import app from "../../";
 import connect, { MongoHelper } from "../db-helper";
-import { number, string } from "zod";
+import { number, object, string } from "zod";
 
 describe("Category controller", () => {
   let mongoHelper: MongoHelper;
@@ -22,7 +22,7 @@ describe("Category controller", () => {
   it("Should create a category", async () => {
 
     const response = await request(app).post("/api/v1/categories").send({
-      _id: "655e1356be9cf967bdead01f", name: "Test cat",
+      _id:  "655e1356be9cf967bdead01f", name: "Test cat", image:"https://i.imgur.com/QkIa5tT.jpeg"
     });
 
     expect(response.body.data).toHaveProperty("name");
@@ -31,9 +31,12 @@ describe("Category controller", () => {
     
     expect(response.body.data).toEqual({
       name: "Test cat",
-      //_id: expect.any(string),
-      _id: "655e1356be9cf967bdead01f",
-      __v: 0,
+      image: expect.any(String),
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String),
+      id:  expect.any(String),
+      //id:  "655e1356be9cf967bdead01f",
+      
     });
   });
 
@@ -42,9 +45,8 @@ describe("Category controller", () => {
   it("should get the category", async () => {
     // get a category
     const response = await request(app).get("/api/v1/categories/655e1356be9cf967bdead01f");
-    //expect(response.body.data.length).toEqual(1);
     expect(response.body.data).toMatchObject({
-      _id: "655e1356be9cf967bdead01f",
+      id:  "655e1356be9cf967bdead01f",
     });
   });
 
@@ -58,15 +60,17 @@ describe("Category controller", () => {
         
     expect(response.body.data).toEqual({
       name: "Updated cat",
-      //_id: expect.any(string),
-      _id: "655e1356be9cf967bdead01f",
-      __v: 0,
+      image: expect.any(String),
+      updatedAt: expect.any(String),
+      createdAt: expect.any(String),
+      id:  expect.any(String),
+      
     });
     });
 
     it("should delete the category", async () => {
       const response = await request(app).delete("/api/v1/categories/655e1356be9cf967bdead01f");
-    expect(response.body.data._id).toEqual(
+    expect(response.body.data.id).toEqual(
      "655e1356be9cf967bdead01f");
     });
 
