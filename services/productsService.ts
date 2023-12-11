@@ -1,9 +1,15 @@
 import ProductRepo from "../models/Product";
 import { Product } from "../types/products";
 
-async function paginateProducts(pageNumber: number, pageSize: number) {
+async function paginateProducts(pageNumber: number, pageSize: number, title:string, categoryId:any, min_price:Number, max_price:Number) {
   const skip = (pageNumber - 1) * pageSize;
-  const products = await ProductRepo.find().skip(skip).limit(pageSize).populate('categoryId').exec();
+  const regex = new RegExp(`^${title}`, 'i');
+  //const products = await ProductRepo.find({title:title}).skip(skip).limit(pageSize).populate('categoryId').exec();
+  if(categoryId){
+    const products = await ProductRepo.find({ title: { $regex: regex }, categoryId:categoryId,  price: { $gte: min_price, $lte: max_price }  }).skip(skip).limit(pageSize).populate('categoryId').exec();
+    return products;
+  }
+  const products = await ProductRepo.find({ title: { $regex: regex },  price: { $gte: min_price, $lte: max_price }  }).skip(skip).limit(pageSize).populate('categoryId').exec();
   return products;
 }
 
@@ -14,6 +20,11 @@ async function findAll() {
 
 async function findOne(productId: string) {
   const product = await ProductRepo.findById(productId).populate('categoryId').exec();
+  return product;
+}
+
+async function findByTitle(title: string) {
+  const product = await ProductRepo.find({title: title}).populate('categoryId').exec();
   return product;
 }
 
@@ -36,6 +47,7 @@ async function deleteOne(productId: string) {
 
 export default {
   findOne,
+  findByTitle,
   findAll,
   createOne,
   updateOne,
