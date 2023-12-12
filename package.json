@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build_ci": "tsc",
+    "start_ci": "node dist/index.js",
     "build": "tsc -w",
     "start": "cross-env  NODE_ENV=DEV nodemon dist/index.js",
     "test": "cross-env NODE_ENV=test jest --forceExit --coverage --verbose false --runInBand"
