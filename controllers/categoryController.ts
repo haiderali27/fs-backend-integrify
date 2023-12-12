@@ -1,7 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
 import CategoryService from "../services/categoryService"
 import { ApiError } from "../errors/ApiError";
-import { ResponseHandler } from "../responses/ResponeHandler";
 import { ResponseData } from "../responses/ResponseData";
 
 const CategoryController = {
@@ -50,7 +49,7 @@ const CategoryController = {
       next(ApiError.internal("Details are Required"))
     }
     const newCategory = await CategoryService.createOne(category)
-    next(ResponseHandler.resourceCreated(JSON.stringify(newCategory), `Category with ${newCategory._id} has been added`))
+    //next(ResponseHandler.resourceCreated(JSON.stringify(newCategory), `Category with ${newCategory._id} has been added`))
     //res.status(201).json({message: `Category with ${newCategory._id} has been added`});
     next(ResponseData.fetchResource(201, newCategory))
 

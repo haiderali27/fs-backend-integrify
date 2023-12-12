@@ -25,11 +25,11 @@ describe("Category controller", () => {
       _id:  "655e1356be9cf967bdead01f", name: "Test cat", image:"https://i.imgur.com/QkIa5tT.jpeg"
     });
 
-    expect(response.body.data).toHaveProperty("name");
-    //expect(response.body.data.name).toMatchObject('Test cat');
-    expect(response.body.data.name).toEqual('Test cat');
+    expect(response.body).toHaveProperty("name");
+    //expect(response.body.name).toMatchObject('Test cat');
+    expect(response.body.name).toEqual('Test cat');
     
-    expect(response.body.data).toEqual({
+    expect(response.body).toEqual({
       name: "Test cat",
       image: expect.any(String),
       updatedAt: expect.any(String),
@@ -45,7 +45,7 @@ describe("Category controller", () => {
   it("should get the category", async () => {
     // get a category
     const response = await request(app).get("/api/v1/categories/655e1356be9cf967bdead01f");
-    expect(response.body.data).toMatchObject({
+    expect(response.body).toMatchObject({
       id:  "655e1356be9cf967bdead01f",
     });
   });
@@ -58,7 +58,7 @@ describe("Category controller", () => {
          name: "Updated cat",
       });;
         
-    expect(response.body.data).toEqual({
+    expect(response.body).toEqual({
       name: "Updated cat",
       image: expect.any(String),
       updatedAt: expect.any(String),
@@ -70,7 +70,7 @@ describe("Category controller", () => {
 
     it("should delete the category", async () => {
       const response = await request(app).delete("/api/v1/categories/655e1356be9cf967bdead01f");
-    expect(response.body.data.id).toEqual(
+    expect(response.body.id).toEqual(
      "655e1356be9cf967bdead01f");
     });
 

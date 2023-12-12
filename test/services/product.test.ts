@@ -11,7 +11,7 @@ describe("Product service", () => {
   });
 
   beforeEach(async () => {
-    await CategoryModel.create({ name: "Test Category" }); // Create test category
+    await CategoryModel.create({ title: "Test Category" }); // Create test category
   });
 
   afterEach(async () => {
@@ -26,10 +26,10 @@ describe("Product service", () => {
     // create new product
     const product: any = {
       _id: "655e1356be9cf967bdead01f",
-      name: "Test Product",
+      title: "Test Product",
       description: "This is a test product.",
       price: 19.99,
-      image: "test-image-url.jpg",
+      images: ["test-image-url.jpg"],
       categoryId: "655e1356be9cf967bdead01f",
     };
 
@@ -38,14 +38,14 @@ describe("Product service", () => {
       "655e1356be9cf967bdead01f"
     );
 
-    expect(newProduct).toHaveProperty("name");
-    expect(newProduct.name).toEqual("Test Product");
+    expect(newProduct).toHaveProperty("title");
+    expect(newProduct.title).toEqual("Test Product");
   });
 
   it("should return a list of products", async () => {
     // create new product
     const newProduct = new ProductRepo({
-      name: "Test Product",
+      title: "Test Product",
       description: "This is a test product.",
       price: 19.99,
       image: "https://example.com/smartphone.jpg",
@@ -57,13 +57,13 @@ describe("Product service", () => {
     const products = await ProductService.findAll();
 
     expect(products.length).toEqual(1);
-    expect(products[0]).toHaveProperty("name", "Test Product");
+    expect(products[0]).toHaveProperty("title", "Test Product");
   });
 
   it("should find a product by ID", async () => {
     // create new product
     const newProduct = new ProductRepo({
-      name: "Test Product",
+      title: "Test Product",
       description: "This is a test product.",
       price: 19.99,
       image: "https://example.com/smartphone.jpg",
@@ -74,13 +74,13 @@ describe("Product service", () => {
 
     const foundProduct = await ProductService.findOne(savedProduct._id);
 
-    expect(foundProduct).toHaveProperty("name", "Test Product");
+    expect(foundProduct).toHaveProperty("title", "Test Product");
   });
 
   it("should delete a product by ID", async () => {
     // create new product
     const newProduct = new ProductRepo({
-      name: "Test Product",
+      title: "Test Product",
       description: "This is a test product.",
       price: 19.99,
       image: "https://example.com/smartphone.jpg",
@@ -91,7 +91,7 @@ describe("Product service", () => {
 
     const deletedProduct = await ProductService.deleteOne(savedProduct._id);
 
-    expect(deletedProduct).toHaveProperty("name", "Test Product");
+    expect(deletedProduct).toHaveProperty("title", "Test Product");
     expect(deletedProduct).toHaveProperty(
       "description",
       "This is a test product."

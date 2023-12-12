@@ -33,6 +33,7 @@ export async function findOneUser(req: Request, res: Response, next: NextFunctio
   //   next(ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"))
   //   return  
   // }
+  try{
   const user = await UsersService.findOne(userId);
 
   if (!user) {
@@ -41,6 +42,10 @@ export async function findOneUser(req: Request, res: Response, next: NextFunctio
   }
   //next(ResponseHandler.resourceFetched(JSON.stringify(user)))
   next(ResponseData.fetchResource(200, user))
+}catch(error){
+  console.log('failed to get ')
+  next(ApiError.badRequest("Bad Request"))
+}
 
  // res.json({ user });
 }
@@ -80,7 +85,7 @@ export async function findOneAndDelete( req: Request, res: Response, next: NextF
         next(ApiError.resourceNotFound("User not found."));
         return;
     }
-    next(ResponseHandler.resourceDeleted(JSON.stringify(deletedUser), `User with ${deletedUser._id} has been Deleted`))
+    //next(ResponseHandler.resourceDeleted(JSON.stringify(deletedUser), `User with ${deletedUser._id} has been Deleted`))
     next(ResponseData.fetchResource(200, deletedUser))
 
    // res.status(200).json("User deleted ...");

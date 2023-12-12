@@ -23,27 +23,27 @@ import app from "../../";
   it("Should create a product", async () => {
     const response = await request(app).post("/api/v1/products").send({
       _id: "655e78935512aa4109537c03",
-      name: "Smartphone",
+      title: "Smartphone",
       description: "High-end smartphone with advanced features",
       price: 799.99,
-      image: "https://example.com/smartphone.jpg",
+      images: ["https://example.com/smartphone.jpg"],
       categoryId: "654e9ddac9cca8d8e6641666",
     });
 
-    expect(response.body.product).toHaveProperty("name");
-    expect(response.body.product.name).toEqual("Smartphone");
-    expect(response.body.product).toHaveProperty("description");
-    expect(response.body.product.description).toEqual(
+    expect(response.body).toHaveProperty("title");
+    expect(response.body.title).toEqual("Smartphone");
+    expect(response.body).toHaveProperty("description");
+    expect(response.body.description).toEqual(
       "High-end smartphone with advanced features"
     );
-    expect(response.body.product).toHaveProperty("price");
-    expect(response.body.product.price).toEqual(799.99);
-    expect(response.body.product).toHaveProperty("image");
-    expect(response.body.product.image).toEqual(
+    expect(response.body).toHaveProperty("price");
+    expect(response.body.price).toEqual(799.99);
+    expect(response.body).toHaveProperty("images");
+    expect(response.body.images[0]).toEqual(
       "https://example.com/smartphone.jpg"
     );
-    expect(response.body.product).toHaveProperty("categoryId");
-    expect(response.body.product.categoryId).toEqual(
+    expect(response.body).toHaveProperty("categoryId");
+    expect(response.body.categoryId).toEqual(
       "654e9ddac9cca8d8e6641666"
     );
   });
@@ -54,45 +54,45 @@ import app from "../../";
     );
 
 
-    expect(response.body.product).toHaveProperty("name");
-    expect(response.body.product.name).toEqual("Smartphone");
-    expect(response.body.product).toHaveProperty("description");
-    expect(response.body.product.description).toEqual(
+    expect(response.body).toHaveProperty("title");
+    expect(response.body.title).toEqual("Smartphone");
+    expect(response.body).toHaveProperty("description");
+    expect(response.body.description).toEqual(
       "High-end smartphone with advanced features"
     );
-    expect(response.body.product).toHaveProperty("price");
-    expect(response.body.product.price).toEqual(799.99);
-    expect(response.body.product).toHaveProperty("image");
-    expect(response.body.product.image).toEqual(
+    expect(response.body).toHaveProperty("price");
+    expect(response.body.price).toEqual(799.99);
+    expect(response.body).toHaveProperty("images");
+    expect(response.body.images[0]).toEqual(
       "https://example.com/smartphone.jpg"
     );
-    expect(response.body.product).toHaveProperty("categoryId");
+    expect(response.body).toHaveProperty("categoryId");
   });
 
   it("Should update the product", async () => {
     const response = await request(app)
       .put("/api/v1/products/655e78935512aa4109537c03")
       .send({
-        name: "Updated Smartphone",
+        title: "Updated Smartphone",
         description: "Updated description for the smartphone",
         price: 899.99,
-        image: "https://example.com/updated-smartphone.jpg",
+        images: ["https://example.com/updated-smartphone.jpg"],
         categoryId: "655e9e08106158f8d895ccbe",
       });
 
-    expect(response.body.product).toHaveProperty("name");
-    expect(response.body.product.name).toEqual("Updated Smartphone");
-    expect(response.body.product).toHaveProperty("description");
-    expect(response.body.product.description).toEqual(
+    expect(response.body).toHaveProperty("title");
+    expect(response.body.title).toEqual("Updated Smartphone");
+    expect(response.body).toHaveProperty("description");
+    expect(response.body.description).toEqual(
       "Updated description for the smartphone"
     );
-    expect(response.body.product).toHaveProperty("price");
-    expect(response.body.product.price).toEqual(899.99);
-    expect(response.body.product).toHaveProperty("image");
-    expect(response.body.product.image).toEqual(
+    expect(response.body).toHaveProperty("price");
+    expect(response.body.price).toEqual(899.99);
+    expect(response.body).toHaveProperty("images");
+    expect(response.body.images[0]).toEqual(
       "https://example.com/updated-smartphone.jpg"
     );
-    expect(response.body.product).toHaveProperty("categoryId");
+    expect(response.body).toHaveProperty("categoryId");
   });
 
   it("Should delete the product", async () => {
@@ -101,10 +101,10 @@ import app from "../../";
     );
 
     const responseBody = JSON.parse(response.text);
-    const message = responseBody.message;
+    expect(response.body).toHaveProperty("id");
+    expect(response.body.id).toEqual("655e78935512aa4109537c03");
 
-    expect(responseBody).toHaveProperty("message");
-    expect(message).toEqual("Product deleted successfully");
+
   });
 });
 

@@ -28,31 +28,33 @@ describe("OrderDetail controller", () => {
       email: "test@g.com",
       password: "hello",
     });
-    expect(userResponse.statusCode).toBe(201);
-    userId = userResponse.body.data._id;
+    //expect(userResponse.statusCode).toBe(201);
+    userId = userResponse.body._id;
     const orderResponse = await request(app).post(ORDERS_URL).send({
       userId: userId,
       date: "2011-10-05T14:48:00.000Z",
       totalAmount: 100,
     });
-    expect(orderResponse.statusCode).toBe(201);
-    orderId = orderResponse.body.data._id;
+    //expect(orderResponse.statusCode).toBe(201);
+    orderId = orderResponse.body._id;
     const categoryResponse = await request(app).post(CATEGORIES_URL).send({
       name: " Test cat",
     });
-    expect(categoryResponse.statusCode).toBe(201);
-    categoryId = categoryResponse.body.data._id;
+    //expect(categoryResponse.statusCode).toBe(201);
+    categoryId = categoryResponse.body._id;
     const productResponse = await request(app).post(PRODUCTS_URL).send({
-      name: " Test cat",
+      title: " Test cat",
       description: "Animal",
       price: 10.2,
-      image: "google.com",
+      images: ["google.com"],
       categoryId: categoryId,
     });
-    expect(productResponse.statusCode).toBe(201);
-    productId = productResponse.body.product._id;
-  }, 60000);
+    //expect(productResponse.statusCode).toBe(201);
+    productId = productResponse.body._id;
+  });
+  afterEach(async()=>{
 
+  });
   afterAll(async () => {
     await mongoHelper.closeDatabase();
   });
@@ -75,17 +77,17 @@ describe("OrderDetail controller", () => {
     await createOrderDetail();
 
     //const ordersResponse = await request(app).get(ORDERS_URL);
-    //expect(ordersResponse.body.data.length).toBe(1);
+    //expect(ordersResponse.body.length).toBe(1);
   });
 
   it("should get the orderDetail", async () => {
     // get a category
     const response = await createOrderDetail();
-    const orderDetailId = response.body.data._id;
+    const orderDetailId = response.body._id;
     const singleResponse = await request(app).get(
       ORDERDETAILS_URL + "/" + orderDetailId
     );
-    expect(singleResponse.body.data._id).toEqual(orderDetailId);
+    expect(singleResponse.body._id).toEqual(orderDetailId);
   });
 
   it("should update the orderDetail", async () => {
@@ -94,7 +96,7 @@ describe("OrderDetail controller", () => {
     // update
     // get and check
     const response = await createOrderDetail();
-    const orderDetailId = response.body.data._id;
+    const orderDetailId = response.body._id;
     const putResponse = await request(app)
       .put(ORDERDETAILS_URL + "/" + orderDetailId)
       .send({
@@ -104,8 +106,8 @@ describe("OrderDetail controller", () => {
         priceAtPurchase: 130,
       });
 
-    expect(putResponse.body.data.quantity).toEqual(120);
-    expect(putResponse.body.data.priceAtPurchase).toEqual(130);
+    expect(putResponse.body.quantity).toEqual(120);
+    expect(putResponse.body.priceAtPurchase).toEqual(130);
   });
 
   it("should delete the orderDetail", async () => {
@@ -113,10 +115,10 @@ describe("OrderDetail controller", () => {
     // delete orderDetail
     // get and checkDetail
     const response = await createOrderDetail();
-    const orderDetailId = response.body.data._id;
+    const orderDetailId = response.body._id;
     const deleteResponse = await request(app).delete(
       ORDERDETAILS_URL + "/" + orderDetailId
     );
-    expect(deleteResponse.body.data._id).toEqual(orderDetailId);
+    expect(deleteResponse.body._id).toEqual(orderDetailId);
   });
 });

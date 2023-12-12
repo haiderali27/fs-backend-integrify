@@ -34,10 +34,10 @@ describe("OrderDetail controller", () => {
     const category: any = await categoryService.createOne(categoryObj);
     categoryId = category._id;
     const productObj: any = {
-      name: " Test cat",
+      title: " Test cat",
       description: "Animal",
       price: 10.2,
-      image: "google.com",
+      images: ["google.com"],
     };
     const product: any = await productsService.createOne(
       productObj,

@@ -2,6 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import orderDetailService from "../services/orderDetailService";
 import { ApiError } from "../errors/ApiError";
 import { ResponseHandler } from "../responses/ResponeHandler";
+import { ResponseData } from "../responses/ResponseData";
 
 async function findOrderDetailOffset(
   req: Request,
@@ -14,7 +15,9 @@ async function findOrderDetailOffset(
     pageNumber,
     pageSize
   );
-  next(ResponseHandler.resourceFetched(JSON.stringify(list)));
+  //next(ResponseHandler.resourceFetched(JSON.stringify(list)));
+  next(ResponseData.fetchResource(200, list));
+
 }
 
 async function findAllOrderDetail(
@@ -38,7 +41,9 @@ async function findOneOrderDetail(
     next(ApiError.resourceNotFound("OrderDetail not found."));
     return;
   }
-  next(ResponseHandler.resourceFetched(JSON.stringify(orderDetail)));
+  //next(ResponseHandler.resourceFetched(JSON.stringify(orderDetail)));
+  next(ResponseData.fetchResource(200, orderDetail));
+
 }
 
 async function createOneOrderDetail(
@@ -49,12 +54,15 @@ async function createOneOrderDetail(
   const newOrderDetail = req.body;
   const orderDetail = await orderDetailService.createOne(newOrderDetail);
 
-  next(
-    ResponseHandler.resourceCreated(
-      JSON.stringify(orderDetail),
-      `Order Detail with ${orderDetail._id} has been added`
-    )
-  );
+ // next(
+  //  ResponseHandler.resourceCreated(
+   //   JSON.stringify(orderDetail),
+   //   `Order Detail with ${orderDetail._id} has been added`
+   // )
+   //);
+   next(ResponseData.fetchResource(200, newOrderDetail));
+
+  
 }
 
 async function findOneAndUpdate(
@@ -74,12 +82,14 @@ async function findOneAndUpdate(
     return;
   }
 
-  next(
-    ResponseHandler.resourceUpdated(
-      JSON.stringify(updatedOrderDetail),
-      `OrderDetail with ${updatedOrderDetail._id} has been updated`
-    )
-  );
+  //next(
+  //  ResponseHandler.resourceUpdated(
+  //    JSON.stringify(updatedOrderDetail),
+  //    `OrderDetail with ${updatedOrderDetail._id} has been updated`
+  // )
+  //);
+  next(ResponseData.fetchResource(200, updatedOrderDetail));
+
 }
 
 async function findOneAndDelete(
@@ -97,12 +107,14 @@ async function findOneAndDelete(
     return;
   }
 
-  next(
-    ResponseHandler.resourceDeleted(
-      JSON.stringify(deletedOrderDetail),
-      `OrderDetail with ${deletedOrderDetail._id} has been deleted`
-    )
-  );
+ // next(
+  //  ResponseHandler.resourceDeleted(
+  //    JSON.stringify(deletedOrderDetail),
+  //    `OrderDetail with ${deletedOrderDetail._id} has been deleted`
+   // )
+  //);
+  next(ResponseData.fetchResource(200, deletedOrderDetail));
+
 }
 
 export default {

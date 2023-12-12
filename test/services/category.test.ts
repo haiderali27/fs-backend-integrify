@@ -25,6 +25,7 @@ describe("Category controller", () => {
     const category: any = {
       _id: "655e1356be9cf967bdead01f",
       name: "test",
+      image: ""
     };
     const newCategory = await CategoryService.createOne(category);
 
