@@ -24,6 +24,8 @@ async function findOne(userId: number) {
   return user
 }
 
+
+
 async function getOne(userId: string) {
   const id = new mongoose.Types.ObjectId(userId)
   const user = await UserRepo.findById(userId)
@@ -54,13 +56,15 @@ async function createNewOne({
   name,
   email,
   password,
-}: {
+  role}: 
+  {
   name: string,
   email: string,
-  password: string
+  password: string,
+  role: string
 }) {
   const hashedPassword = bcrypt.hashSync(password, 10)
-  console.log("HashedPassword:", hashedPassword)
+  //console.log("HashedPassword:", hashedPassword)
   
   const userFromDB = await findOneByEmail(email)
   if (userFromDB) {
@@ -70,6 +74,7 @@ async function createNewOne({
     name,
     email,
     password: hashedPassword,
+    role
   })
   await user.save()
   const userWithoutPass = {
@@ -92,8 +97,8 @@ async function login(email: string, password: string) {
   }
 
   const hashedPassword = user.password
-  console.log("hashedPassword==",hashedPassword)
-  console.log("Password==",password)
+  //console.log("hashedPassword==",hashedPassword)
+  //console.log("Password==",password)
 
   const isValid = bcrypt.compareSync(password, hashedPassword)
   if (!isValid) {

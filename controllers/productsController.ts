@@ -36,6 +36,12 @@ const ProductController = {
 
   async findOneProduct(req: Request, res: Response, next: NextFunction) {
     const productId = req.params.productId;
+
+    if(productId.length!==24){
+      next(ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"))
+      return
+    }
+
     const product = await ProductsService.findOne(productId);
 
     if (!product) {

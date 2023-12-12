@@ -50,6 +50,29 @@ export async function findOneUser(req: Request, res: Response, next: NextFunctio
  // res.json({ user });
 }
 
+
+
+
+export async function findUserByEmail(req: Request, res: Response, next: NextFunction) {
+  const {email} = req.body
+ 
+  try{
+  const user = await UsersService.findOneByEmail(email)
+
+  if (!user) {
+    next(ResponseData.fetchResource(200, {isAvailable: false}))
+    return;
+  }
+  next(ResponseData.fetchResource(200, {isAvailable: true}))
+}catch(error){
+  console.log('failed to get ')
+  next(ApiError.badRequest("Bad Request"))
+}
+
+ // res.json({ user });
+}
+
+
 export async function createOneUser(req: Request, res: Response, next:NextFunction) {
   const newUser = req.body;
   if(!newUser){
@@ -93,8 +116,8 @@ export async function findOneAndDelete( req: Request, res: Response, next: NextF
 
 //SignUp
 export async function signup(req: Request, res: Response,  next: NextFunction) {
-  const { name, email, password } = req.body
-  const user = await UsersService.createNewOne({ name, email, password })
+  const { name, email, password, role } = req.body
+  const user = await UsersService.createNewOne({ name, email, password, role})
   if (!user) {
     res.status(400).json({
       message: "User exists",
@@ -153,5 +176,6 @@ export default {
   findOneAndDelete,
   login,
   getProfile,
-  signup
+  signup,
+  findUserByEmail
 };

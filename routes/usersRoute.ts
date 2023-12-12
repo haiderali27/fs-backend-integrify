@@ -7,12 +7,13 @@ const router = express.Router()
 
 router.get("/", UserController.findAllUser)
 router.get("/:userId", UserController.findOneUser)
-router.post("/",validateUser, UserController.createOneUser)
+//router.post("/",validateUser, UserController.createOneUser)
 router.put("/:userId", UserController.findOneAndUpdate);
 router.delete("/:userId", UserController.findOneAndDelete);
 router.get("/offset", UserController.getOffsetUser);
 
-router.post("/signup", UserController.signup)
+router.post("/", UserController.signup)
+router.post("/is-available", UserController.findUserByEmail)
 
 // router.use((req, res, next) => {
 //     console.log("👀 got here")
