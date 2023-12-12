@@ -79,7 +79,7 @@ app.use(responseHandler);
 app.use(routeNotFound);
 
 
-app.use('/.netlify/functions', router)
+app.use('/.netlify/functions/api', router)
 
 
 if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
