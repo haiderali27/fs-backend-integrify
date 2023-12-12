@@ -13,8 +13,10 @@ import authRoute from "./routes/authRoute";
 import { checkAuth } from "./middlewares/checkAuth";
 import { responseHandler } from "./middlewares/responsehandler";
 import orderDetailsRoute from "./routes/orderDetailsRoute";
+import router from "./routes/itemsRoute";
 const cors = require('cors');
 const jwt = require("jsonwebtoken");
+const serverless = require("serverless-http")
 
 
 
@@ -76,9 +78,14 @@ app.get("/api/v1/protected", checkAuth, (req, res) => {
 app.use(responseHandler);
 app.use(routeNotFound);
 
+
+app.use('/.netlify/functions', router)
+
+
 if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
   app.listen(PORT, () => {
     console.log(`👀 app is running at localhost:${PORT}`);
   });
 }
 export default app;
+module.exports.handler= serverless(app)
