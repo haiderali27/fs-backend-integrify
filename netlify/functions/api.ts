@@ -43,7 +43,7 @@ if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
   api.use(responseHandler);
   api.use(routeNotFound);
   
-  api.use('/', (req, res)=>{
+  api.get('/', (req, res)=>{
     res.json('{"msg":"This is root route :), Welcome to the API" }')
   });
 
