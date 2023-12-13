@@ -30,6 +30,11 @@ if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
   api.get("/hello", loggingMiddleware, (_, res) => {
     res.json({ msg: "hello, from Express.js!" });
   });
+
+  api.get('/', (req, res)=>{
+    res.json('{"msg":"This is root route :), Welcome to the API" }')
+  });
+
   
   api.use("/api/v1/items", itemsRoute);
   api.use("/api/v1/products", productsRoute);
@@ -43,9 +48,6 @@ if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
   api.use(responseHandler);
   api.use(routeNotFound);
   
-  api.get('/', (req, res)=>{
-    res.json('{"msg":"This is root route :), Welcome to the API" }')
-  });
 
 //api.use('/.netlify/functions/api', router)
 
