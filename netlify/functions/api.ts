@@ -20,7 +20,7 @@ const api = express();
 
 api.use(express.json());
 api.use(cors());
-const router = express.Router();
+//const router = express.Router();
 
 if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
     const mongoURL = process.env.DB_URL as string;
@@ -43,7 +43,7 @@ if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
   api.use(responseHandler);
   api.use(routeNotFound);
   
-  router.get('/', (req, res)=>{
+  api.use('/', (req, res)=>{
     res.json('{"msg":"This is root route :), Welcome to the API" }')
   });
 
