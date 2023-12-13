@@ -3,6 +3,8 @@ import ProductsService from "../services/productsService";
 import { ApiError } from "../errors/ApiError";
 import { Product } from "../types/products";
 import { ResponseData } from "../responses/ResponseData";
+import { WithAuthRequest } from "../middlewares/checkAuth";
+import { ResponseHandler } from "../responses/ResponeHandler";
 
 
 const ProductController = {
@@ -54,7 +56,12 @@ const ProductController = {
 
   },
 
-  async createOneProduct(req: Request, res: Response, next:NextFunction) {
+  async createOneProduct(req: WithAuthRequest, res: Response, next:NextFunction) {
+    const decoded = req.decoded
+    if(decoded && !(decoded.role==='customer' || decoded.role==='admin')){
+      next(ApiError.forbidden('Role should be admin or customer'))
+      return
+    }
     const newProduct: Product = req.body;
     const categoryId: string = req.body.categoryId;
 
@@ -65,7 +72,12 @@ const ProductController = {
  
   },
 
-  async updateProduct(req: Request, res: Response, next: NextFunction) {
+  async updateProduct(req: WithAuthRequest, res: Response, next: NextFunction) {
+    const decoded = req.decoded
+    if(decoded && decoded.role!=='admin'){
+      next(ApiError.forbidden('Role should be admin'))
+      return
+    }
     const productId = req.params.productId;
     const updatedProduct: Product = req.body;
     const categoryId: string = req.body.categoryId;
@@ -82,7 +94,12 @@ const ProductController = {
 
   },
 
-  async deleteProduct(req: Request, res: Response, next: NextFunction) {
+  async deleteProduct(req: WithAuthRequest, res: Response, next: NextFunction) {
+    const decoded = req.decoded
+    if(decoded && decoded.role!=='admin'){
+      next(ApiError.forbidden('Role should be admin'))
+      return
+    }
     const productId = req.params.productId;
     const deletedProduct = await ProductsService.deleteOne(productId);
 

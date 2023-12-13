@@ -117,6 +117,12 @@ export async function findOneAndDelete( req: Request, res: Response, next: NextF
 //SignUp
 export async function signup(req: Request, res: Response,  next: NextFunction) {
   const { name, email, password, role } = req.body
+  if(role&&!(role==='admin' || role==='customer')){
+   
+    next(ApiError.forbidden('Role should be either admin or customer'))
+    return
+  }
+
   const user = await UsersService.createNewOne({ name, email, password, role})
   if (!user) {
     res.status(400).json({
