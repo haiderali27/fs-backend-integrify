@@ -17,6 +17,8 @@ const cors = require('cors');
 const jwt = require("jsonwebtoken");
 import mongoose from "mongoose";
 const api = express();
+const { MongoClient } = require('mongodb');
+
 
 api.use(express.json());
 api.use(cors());
@@ -24,7 +26,15 @@ api.use(cors());
 
 if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
     const mongoURL = process.env.DB_URL as string;
-    mongoose.connect(mongoURL).then(() => console.log("Connected!"));
+    //mongoose.connect(mongoURL).then(() => console.log("Connected!"));
+    const client = new MongoClient(mongoURL);
+    module.exports.handler = async function () {
+      const databases = await client.db('admin').command({ listDatabases: 1 });
+      return {
+        statusCode: 200,
+        databases: databases
+      };
+    };
   }
   
   api.get("/hello", loggingMiddleware, (_, res) => {
@@ -36,13 +46,13 @@ if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
   });
 
   
-  api.use("/api/v1/items", itemsRoute);
-  api.use("/api/v1/products", productsRoute);
-  api.use("/api/v1/categories", categoryRoute);
-  api.use("/api/v1/users", usersRoute);
-  api.use("/api/v1/orders", orderRoute);
-  api.use("/api/v1/orderDetails", orderDetailsRoute);
-  api.use("/api/v1/auth", authRoute);
+  api.use("/items", itemsRoute);
+  api.use("/products", productsRoute);
+  api.use("/categories", categoryRoute);
+  api.use("/users", usersRoute);
+  api.use("/orders", orderRoute);
+  api.use("/orderDetails", orderDetailsRoute);
+  api.use("/auth", authRoute);
   
   
   api.use(responseHandler);
@@ -51,4 +61,6 @@ if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
 
 //api.use('/.netlify/functions/api', router)
 
+
 export const handler = serverless(api);
+
