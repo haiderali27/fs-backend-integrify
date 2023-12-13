@@ -25,16 +25,18 @@ api.use(cors());
 //const router = express.Router();
 
 if (process.env.NODE_ENV === "DEV" || process.env.NODE_ENV === "PRODUCTION") {
-    const mongoURL = process.env.DB_URL as string;
-    //mongoose.connect(mongoURL).then(() => console.log("Connected!"));
-    const client = new MongoClient(mongoURL);
-    module.exports.handler = async function () {
-      const databases = await client.db('admin').command({ listDatabases: 1 });
-      return {
-        statusCode: 200,
-        databases: databases
-      };
-    };
+    
+  const mongoURL = process.env.DB_URL as string;
+    const mongoClient = new MongoClient(mongoURL);
+    const clientPromise = mongoClient.connect()
+    const handler = async(event:any) => {
+      try{
+        const database = await (clientPromise)
+      }catch(error:any){
+        return { statusCode:500, body: error.toString()}
+      }
+    }
+
   }
   
   api.get("/hello", loggingMiddleware, (_, res) => {
