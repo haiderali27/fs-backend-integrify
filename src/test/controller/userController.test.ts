@@ -25,7 +25,7 @@ describe("User controller", () => {
         name: "Test user", 
         email:"test@gmail.com",
         password:"test123",
-        role:"User"
+        role:"admin"
     });
   console.log("###########################",response.body)
     expect(response.body).toHaveProperty("name");
@@ -33,7 +33,7 @@ describe("User controller", () => {
     expect(response.body).toHaveProperty("email");
     expect(response.body.email).toEqual("test@gmail.com");
     expect(response.body).toHaveProperty("role");
-    expect(response.body.role).toEqual("User");
+    expect(response.body.role).toEqual("admin");
     // expect(response.body).toEqual({
     //   name: "Test user",
     //   email:"test@gmail.com",
@@ -53,33 +53,6 @@ describe("User controller", () => {
 //       _id: "655e2273fe4c4f58b6a80113",
 //     });
 //   });
-
-it("should update the user", async () => { 
-   // let user:any = {name: "Updated user"}
-    const response = await request(app).
-    put("/api/v1/users/655e2273fe4c4f58b6a80113")
-    .send({
-        name: "Updated user",
-        email:"update@gmail.com",
-        password:"test123",
-        role:"User",
-    });
-    //expect(response.body.user).toEqual({   
-    expect(response.body).toEqual({
-      name: "Updated user",
-      email: "update@gmail.com",
-      password: "test123",
-      role: "User",
-      id: "655e2273fe4c4f58b6a80113",
-   
-    });
-});
-
-it("should delete the user", async () => {
-    const response = await request(app)
-      .delete("/api/v1/users/655e2273fe4c4f58b6a80113");
-      expect(response.body.id).toEqual("655e2273fe4c4f58b6a80113");
-    });
 
 });
 

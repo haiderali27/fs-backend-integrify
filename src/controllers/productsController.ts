@@ -58,6 +58,7 @@ const ProductController = {
 
   async createOneProduct(req: WithAuthRequest, res: Response, next:NextFunction) {
     const decoded = req.decoded
+    
     if(decoded && !(decoded.role==='customer' || decoded.role==='admin')){
       next(ApiError.forbidden('Role should be admin or customer'))
       return

@@ -10,12 +10,12 @@ export interface WithAuthRequest extends Request {
 
 export function checkAuth(req: WithAuthRequest,_: Response,next: NextFunction) {
   const token = req.headers.authorization?.split(" ")[1]
-  console.log("token:",token)
+  //console.log("token:",token)
   if (!token) {
     next(ApiError.forbidden("Token is missing"))
     return
   }
-
+  //console.log("token1:",token)
   try {
     const decoded = jwt.verify(token,process.env.TOKEN_SECRET as string) as DecodedUser
     //console.log('#################',decoded.userId)

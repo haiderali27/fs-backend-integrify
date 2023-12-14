@@ -2,13 +2,30 @@ import request from "supertest";
 import app from "../../";
  import connect, { MongoHelper } from '../db-helper';
  import mongoose from 'mongoose';
-
-
+  let token: string;
+  let commonHeaders={}
   describe("Product controller", () => {
     let mongoHelper: MongoHelper;
 
     beforeAll(async () => {
       mongoHelper = await connect();
+
+      await request(app).post("/api/v1/users").send({
+        _id: "655e2273fe4c4f58b6a80113", 
+        name: "Test user", 
+        email:"test@gmail.com",
+        password:"12345",
+        role:"admin"
+    });
+
+    const response =  await request(app).post("/api/v1/auth/login").send({
+      email:"test@gmail.com",
+      password:"12345",
+    });
+      token = response.body.access_token;
+      commonHeaders = { 
+        "Authorization":`Bearer ${token}`,
+      };
     });
   
     afterEach(async () => {
@@ -21,7 +38,9 @@ import app from "../../";
 
 
   it("Should create a product", async () => {
-    const response = await request(app).post("/api/v1/products").send({
+ 
+
+    const response = await request(app).post("/api/v1/products").set(commonHeaders).send({
       _id: "655e78935512aa4109537c03",
       title: "Smartphone",
       description: "High-end smartphone with advanced features",
@@ -42,8 +61,8 @@ import app from "../../";
     expect(response.body.images[0]).toEqual(
       "https://example.com/smartphone.jpg"
     );
-    expect(response.body).toHaveProperty("categoryId");
-    expect(response.body.categoryId).toEqual(
+    expect(response.body).toHaveProperty("category");
+    expect(response.body.category).toEqual(
       "654e9ddac9cca8d8e6641666"
     );
   });
@@ -66,12 +85,12 @@ import app from "../../";
     expect(response.body.images[0]).toEqual(
       "https://example.com/smartphone.jpg"
     );
-    expect(response.body).toHaveProperty("categoryId");
+    expect(response.body).toHaveProperty("category");
   });
 
   it("Should update the product", async () => {
     const response = await request(app)
-      .put("/api/v1/products/655e78935512aa4109537c03")
+      .put("/api/v1/products/655e78935512aa4109537c03").set(commonHeaders)
       .send({
         title: "Updated Smartphone",
         description: "Updated description for the smartphone",
@@ -92,13 +111,13 @@ import app from "../../";
     expect(response.body.images[0]).toEqual(
       "https://example.com/updated-smartphone.jpg"
     );
-    expect(response.body).toHaveProperty("categoryId");
+    expect(response.body).toHaveProperty("category");
   });
 
   it("Should delete the product", async () => {
     const response = await request(app).delete(
       "/api/v1/products/655e78935512aa4109537c03"
-    );
+    ).set(commonHeaders);
 
     const responseBody = JSON.parse(response.text);
     expect(response.body).toHaveProperty("id");

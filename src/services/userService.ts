@@ -78,6 +78,7 @@ async function createNewOne({
   })
   await user.save()
   const userWithoutPass = {
+    id: user.id,
     name: user.name,
     email: user.email,
     role: user.role,
@@ -117,7 +118,7 @@ async function login(email: string, password: string) {
   const accessToken = jwt.sign(payload, process.env.TOKEN_SECRET as string, {
     expiresIn: "1h",
   })
-  console.log("AccessToken:",accessToken)
+  //console.log("AccessToken:",accessToken)
 
   return {
     message: "valid credentials",

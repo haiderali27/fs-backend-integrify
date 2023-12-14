@@ -4,14 +4,30 @@ import app from "../../";
 import connect, { MongoHelper } from "../db-helper";
 import { number, string } from "zod";
 
-describe("Order controller", () => {
+let token: string;
+let commonHeaders={}
+describe("Product controller", () => {
   let mongoHelper: MongoHelper;
 
   beforeAll(async () => {
     mongoHelper = await connect();
+
     await request(app).post("/api/v1/users").send({
-        _id: "655e1356be9cf967bdead01f", name: "Test cat" , email:"testcat@testcat.com", password:"1234", role:"USER",
-      });
+      _id: "655e2273fe4c4f58b6a80113", 
+      name: "Test user", 
+      email:"test@gmail.com",
+      password:"12345",
+      role:"admin"
+  });
+
+  const response =  await request(app).post("/api/v1/auth/login").send({
+    email:"test@gmail.com",
+    password:"12345",
+  });
+    token = response.body.access_token;
+    commonHeaders = { 
+      "Authorization":`Bearer ${token}`,
+    };
   });
 
   afterEach(async () => {
@@ -19,9 +35,10 @@ describe("Order controller", () => {
   });
 
   afterAll(async () => {
-    await request(app).delete("/api/v1/users/655e1356be9cf967bdead01f");
     await mongoHelper.closeDatabase();
   });
+
+  
 
   it("Should create an order", async () => {
     const datee = new Date("2023-11-21T18:52:40.597Z");
@@ -34,7 +51,7 @@ describe("Order controller", () => {
       _id: "655e1356be9cf967bdead01f", totalAmount: 500, userId:"655e1356be9cf967bdead01f", date:datee,
     });
 
-    console.log('#############################', response.body)
+
 
 
     expect(response.body.data).toHaveProperty("userId");

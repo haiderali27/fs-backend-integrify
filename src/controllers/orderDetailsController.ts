@@ -36,7 +36,7 @@ async function findOneOrderDetail(
 ) {
   const orderDetailId = req.params.orderDetailId;
   const orderDetail = await orderDetailService.findone(orderDetailId);
-
+  console.log('#ORDERDETAIL#######', orderDetail)
   if (!orderDetail) {
     next(ApiError.resourceNotFound("OrderDetail not found."));
     return;
@@ -60,7 +60,7 @@ async function createOneOrderDetail(
    //   `Order Detail with ${orderDetail._id} has been added`
    // )
    //);
-   next(ResponseData.fetchResource(200, newOrderDetail));
+   next(ResponseData.fetchResource(201, orderDetail));
 
   
 }
