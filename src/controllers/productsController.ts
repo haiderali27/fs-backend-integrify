@@ -57,6 +57,7 @@ const ProductController = {
   },
 
   async createOneProduct(req: WithAuthRequest, res: Response, next:NextFunction) {
+    try{
     const decoded = req.decoded
     
     if(decoded && !(decoded.role==='customer' || decoded.role==='admin')){
@@ -70,10 +71,16 @@ const ProductController = {
 
     //res.status(201).json({ product });
     next(ResponseData.fetchResource(201, product))
+  }catch(error:any){
+    console.log("Error Message:", error.message)
+    next(ApiError.badRequest("Bad Request"))
+
+  }
  
   },
 
   async updateProduct(req: WithAuthRequest, res: Response, next: NextFunction) {
+    try{
     const decoded = req.decoded
     if(decoded && decoded.role!=='admin'){
       next(ApiError.forbidden('Role should be admin'))
@@ -92,6 +99,10 @@ const ProductController = {
 
     //res.json({ product });
     next(ResponseData.fetchResource(200, product))
+  }catch(error:any){
+    console.log("Error Message:", error.message)
+    next(ApiError.badRequest("Bad Request"))
+  }
 
   },
 
