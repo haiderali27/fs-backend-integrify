@@ -30,7 +30,13 @@ The API should include comprehensive error handling with clear and informative e
 
 Developers should conduct unit tests and integration tests to ensure the reliability and correctness of the API. Instructions for running the tests should be provided in the project's documentation.
 
-## Deployment 
+## How to run? 
+1. git clone https://github.com/haiderali27/fs-backend-integrify.git
+2. npm run install
+3. npm run build
+4. Open a seprate terminal and npm run start
+
+## Deployment Link
 (Always Pending)
 `https://haiderali-integrify-backend.onrender.com/`
 

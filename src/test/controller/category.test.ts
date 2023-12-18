@@ -26,7 +26,6 @@ describe("Category controller", () => {
     });
 
     expect(response.body).toHaveProperty("name");
-    //expect(response.body.name).toMatchObject('Test cat');
     expect(response.body.name).toEqual('Test cat');
     
     expect(response.body).toEqual({
@@ -34,9 +33,7 @@ describe("Category controller", () => {
       image: expect.any(String),
       updatedAt: expect.any(String),
       createdAt: expect.any(String),
-      id:  expect.any(String),
-      //id:  "655e1356be9cf967bdead01f",
-      
+      id:  expect.any(String),      
     });
   });
 

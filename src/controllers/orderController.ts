@@ -7,7 +7,6 @@ import { ResponseHandler } from "../responses/ResponeHandler";
 const OrderController = {
   async getAll(req: Request, res: Response, next: NextFunction) {
     const list = await OrderService.findAll()
-    //res.json({ list });
     next(ResponseHandler.resourceFetched(JSON.stringify(list)))
   }
   ,
@@ -19,7 +18,6 @@ const OrderController = {
       return
     }
     const list = await OrderService.getPaginatedOrder(pageNumber, pageSize)
-    //res.json({ list });
     next(ResponseHandler.resourceFetched(JSON.stringify(list)))
 
   }
@@ -38,7 +36,6 @@ const OrderController = {
     }
 
     const list = await OrderService.getPaginatedUserOrder(userId, pageNumber, pageSize)
-    //res.json({ list });
     next(ResponseHandler.resourceFetched(JSON.stringify(list)))
 
   }
@@ -50,7 +47,6 @@ const OrderController = {
       return
     }
     const list = await OrderService.findAllForUser(userId)
-    //res.json({ list });
     next(ResponseHandler.resourceFetched(JSON.stringify(list)))
 
   }
@@ -110,7 +106,6 @@ const OrderController = {
       return
     }
     next(ResponseHandler.resourceDeleted(JSON.stringify(order), `Order with ${order._id} has been deleted`))
-
   }
 }
 

@@ -1,4 +1,4 @@
-import express, { NextFunction, Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import CategoryService from "../services/categoryService"
 import { ApiError } from "../errors/ApiError";
 import { ResponseData } from "../responses/ResponseData";
@@ -12,18 +12,13 @@ const CategoryController = {
         next(ApiError.internal("PageNumber Must be Non Negative"))
         return
       }
-      const categories = await CategoryService.paginateCategories(pageNumber, pageSize);
-  
-      //next(ResponseHandler.resourceFetched(JSON.stringify(categories)))
-      
+      const categories = await CategoryService.paginateCategories(pageNumber, pageSize);      
       next(ResponseData.fetchResource(200, categories))
       
   }
   ,
   async getAllCategories(req: Request, res: Response, next:NextFunction) {
     const categories = await CategoryService.findAll()
-    //res.json({ list });
-    //next(ResponseHandler.resourceFetched(JSON.stringify(categories)))
     next(ResponseData.fetchResource(200, categories))
   }
   ,
@@ -38,7 +33,6 @@ const CategoryController = {
       next(ApiError.resourceNotFound(`Category ${categoryId} is not found`))
       return 
     }
-    //next(ResponseHandler.resourceFetched(JSON.stringify(item)))
     next(ResponseData.fetchResource(200, item))
 
   }
@@ -49,8 +43,6 @@ const CategoryController = {
       next(ApiError.internal("Details are Required"))
     }
     const newCategory = await CategoryService.createOne(category)
-    //next(ResponseHandler.resourceCreated(JSON.stringify(newCategory), `Category with ${newCategory._id} has been added`))
-    //res.status(201).json({message: `Category with ${newCategory._id} has been added`});
     next(ResponseData.fetchResource(201, newCategory))
 
   }
@@ -74,9 +66,7 @@ const CategoryController = {
       next(ApiError.resourceNotFound("Category not found"))
       return
     }
-    //next(ResponseHandler.resourceUpdated(JSON.stringify(category), `Category with ${category._id} has been updated`))
     next(ResponseData.fetchResource(200, category))
-
   }
   ,
   async deleteCategory(req: Request, res: Response, next:NextFunction) {
@@ -84,7 +74,6 @@ const CategoryController = {
     if(categoryId.length!==24){
       next(ApiError.internal("ID must be a 24 character hex string, 12 byte Uint8Array, or an integer"))
       return
-      
     }
     const category = await CategoryService.deleteOne(categoryId);
 
@@ -92,10 +81,7 @@ const CategoryController = {
       next(ApiError.resourceNotFound("Category not found"))
       return
     }
-    //next(ResponseHandler.resourceDeleted(JSON.stringify(category), `Category with ${category._id} has been Deleted`))
     next(ResponseData.fetchResource(200, category))
-
-
   }
 }
 export default CategoryController;

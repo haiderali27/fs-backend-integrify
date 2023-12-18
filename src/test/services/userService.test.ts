@@ -33,23 +33,7 @@ describe("User service", () => {
     expect(newUser).toHaveProperty("_id");
     expect(newUser.name).toEqual("Test user");
   });
-
-//   it("should return a user list", async () => {
-//     // create new user
-//     const newUser = new UserRepo({
-//       name: "test user",
-//       email:"test@gmail.com",
-//       password:"test123",
-//       role:"User"
-//     });
-
-//     await newUser.save();
-
-//     const users = await UserService.findAll();
-//     expect(users.length).toEqual(1);// check length
-//     expect(users[0]).toHaveProperty("name", "test user");
-//   });
-
+  
   it("should update a User", async () => {
          // create new User
     const user1: any = {

@@ -4,7 +4,6 @@ const Schema = mongoose.Schema
 const ObjectId = Schema.ObjectId
 
 const UserSchema = new Schema({
-  //id: ObjectId,
   name: {
     type: String,
     required: true,
@@ -18,10 +17,10 @@ const UserSchema = new Schema({
     type: String,
     required: true,
   },
-  // avatar: {
-  //   type: String,
-  //   required: true,
-  // },
+   avatar: {
+     type: String,
+     required: true,
+   },
   role: {
     type: String,
     required: true,

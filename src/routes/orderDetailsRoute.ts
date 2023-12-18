@@ -19,12 +19,5 @@ router.put(
   OrderDetailController.findOneAndUpdate
 );
 router.delete("/:orderDetailId", OrderDetailController.findOneAndDelete);
-router.use((req, res, next) => {
-  res.on("finish", () => {
-    console.log("Record created:", {
-      /*log data */
-    });
-  });
-  next();
-});
+
 export default router;

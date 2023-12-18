@@ -1,6 +1,5 @@
 import mongoose, { ObjectId } from "mongoose"
 import UserRepo  from "../models/User"
-//import { User } from "../types/users.js"
 import { User } from "../types/users"
 import bcrypt from 'bcrypt'
 import jwt from "jsonwebtoken"
@@ -56,16 +55,16 @@ async function createNewOne({
   name,
   email,
   password,
+  avatar,
   role}: 
   {
   name: string,
   email: string,
   password: string,
   role: string
+  avatar:string
 }) {
-  const hashedPassword = bcrypt.hashSync(password, 10)
-  //console.log("HashedPassword:", hashedPassword)
-  
+  const hashedPassword = bcrypt.hashSync(password, 10)  
   const userFromDB = await findOneByEmail(email)
   if (userFromDB) {
     return null
@@ -74,7 +73,8 @@ async function createNewOne({
     name,
     email,
     password: hashedPassword,
-    role
+    role,
+    avatar
   })
   await user.save()
   const userWithoutPass = {
@@ -82,6 +82,7 @@ async function createNewOne({
     name: user.name,
     email: user.email,
     role: user.role,
+    avatar: user.avatar
   }
   return userWithoutPass
 }
@@ -98,8 +99,6 @@ async function login(email: string, password: string) {
   }
 
   const hashedPassword = user.password
-  //console.log("hashedPassword==",hashedPassword)
-  //console.log("Password==",password)
 
   const isValid = bcrypt.compareSync(password, hashedPassword)
   if (!isValid) {
@@ -118,7 +117,6 @@ async function login(email: string, password: string) {
   const accessToken = jwt.sign(payload, process.env.TOKEN_SECRET as string, {
     expiresIn: "1h",
   })
-  //console.log("AccessToken:",accessToken)
 
   return {
     message: "valid credentials",

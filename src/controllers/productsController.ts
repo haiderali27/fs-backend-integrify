@@ -4,7 +4,6 @@ import { ApiError } from "../errors/ApiError";
 import { Product } from "../types/products";
 import { ResponseData } from "../responses/ResponseData";
 import { WithAuthRequest } from "../middlewares/checkAuth";
-import { ResponseHandler } from "../responses/ResponeHandler";
 
 
 const ProductController = {
@@ -18,7 +17,6 @@ const ProductController = {
       const max_price = Number(req.query.price_max) || Number.MAX_VALUE
 
       const products = await ProductsService.paginateProducts(pageNumber, pageSize, title, categoryId, min_price, max_price);
-      //res.json({ products });
       next(ResponseData.fetchResource(200, products))
 
     } catch (error) {
@@ -51,7 +49,6 @@ const ProductController = {
       return;
     }
 
-    //res.json({ product });
     next(ResponseData.fetchResource(200, product))
 
   },
@@ -69,7 +66,6 @@ const ProductController = {
 
     const product = await ProductsService.createOne(newProduct, categoryId);
 
-    //res.status(201).json({ product });
     next(ResponseData.fetchResource(201, product))
   }catch(error:any){
     console.log("Error Message:", error.message)
@@ -96,8 +92,6 @@ const ProductController = {
       next(ApiError.resourceNotFound("Product not found."));
       return;
     }
-
-    //res.json({ product });
     next(ResponseData.fetchResource(200, product))
   }catch(error:any){
     console.log("Error Message:", error.message)
@@ -119,11 +113,7 @@ const ProductController = {
       next(ApiError.resourceNotFound("Product not found."));
       return;
     }
-
-    //res.json({ message: "Product deleted successfully" });
     next(ResponseData.fetchResource(200, deletedProduct))
-
-
   },
 };
 

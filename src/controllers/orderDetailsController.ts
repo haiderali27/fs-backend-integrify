@@ -15,7 +15,6 @@ async function findOrderDetailOffset(
     pageNumber,
     pageSize
   );
-  //next(ResponseHandler.resourceFetched(JSON.stringify(list)));
   next(ResponseData.fetchResource(200, list));
 
 }
@@ -36,12 +35,10 @@ async function findOneOrderDetail(
 ) {
   const orderDetailId = req.params.orderDetailId;
   const orderDetail = await orderDetailService.findone(orderDetailId);
-  console.log('#ORDERDETAIL#######', orderDetail)
   if (!orderDetail) {
     next(ApiError.resourceNotFound("OrderDetail not found."));
     return;
   }
-  //next(ResponseHandler.resourceFetched(JSON.stringify(orderDetail)));
   next(ResponseData.fetchResource(200, orderDetail));
 
 }
@@ -53,14 +50,7 @@ async function createOneOrderDetail(
 ) {
   const newOrderDetail = req.body;
   const orderDetail = await orderDetailService.createOne(newOrderDetail);
-
- // next(
-  //  ResponseHandler.resourceCreated(
-   //   JSON.stringify(orderDetail),
-   //   `Order Detail with ${orderDetail._id} has been added`
-   // )
-   //);
-   next(ResponseData.fetchResource(201, orderDetail));
+  next(ResponseData.fetchResource(201, orderDetail));
 
   
 }
@@ -81,13 +71,6 @@ async function findOneAndUpdate(
     next(ApiError.resourceNotFound("OrderDetail not found."));
     return;
   }
-
-  //next(
-  //  ResponseHandler.resourceUpdated(
-  //    JSON.stringify(updatedOrderDetail),
-  //    `OrderDetail with ${updatedOrderDetail._id} has been updated`
-  // )
-  //);
   next(ResponseData.fetchResource(200, updatedOrderDetail));
 
 }
@@ -106,13 +89,6 @@ async function findOneAndDelete(
     next(ApiError.resourceNotFound("OderDetail not found."));
     return;
   }
-
- // next(
-  //  ResponseHandler.resourceDeleted(
-  //    JSON.stringify(deletedOrderDetail),
-  //    `OrderDetail with ${deletedOrderDetail._id} has been deleted`
-   // )
-  //);
   next(ResponseData.fetchResource(200, deletedOrderDetail));
 
 }

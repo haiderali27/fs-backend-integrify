@@ -61,7 +61,6 @@ describe("Category controller", () => {
       name: "testeee",
     };
     const newCategory = await CategoryService.updateOne("655e1356be9cf967bdead01f", category);
-    console.log('#############!@#@!#', newCategory)
     if(newCategory){
       expect(newCategory).toHaveProperty("_id");
       expect(newCategory.name).toEqual("testeee");
